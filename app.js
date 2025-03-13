@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs"); // Import bcrypt for hashing passwords
 const cors = require("cors"); // Allow cross-origin requests
+const jwt = require("jsonwebtoken"); // Import JWT for token generation
 
 const app = express();
 app.use(express.json()); // Enable JSON parsing
