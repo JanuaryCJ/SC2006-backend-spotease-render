@@ -1,8 +1,9 @@
+require("dotenv").config(); // Load environment variables from .env file
 const express = require("express");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs"); // Import bcrypt for hashing passwords
 const cors = require("cors"); // Allow cross-origin requests
-require("dotenv").config(); // Load environment variables from .env file
+const jwt = require("jsonwebtoken"); // Import JWT
 
 const app = express();
 app.use(express.json()); // Enable JSON parsing
@@ -65,6 +66,36 @@ app.post("/register", async (req, res) => {
     res.status(201).json({ status: "User registered" });
   } catch (error) {
     console.error("❌ Error registering user:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.post('/login',async(req,res)=>{
+  try {
+    const { email, password } = req.body;
+
+    // ✅ Validate request data
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email and password are required!" });
+    }
+
+    // ✅ Check if user exists
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // ✅ Compare hashed password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: "Invalid email or password" });
+    }
+
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+    res.status(200).json({ status: "Login successful", token });
+  } catch (error) {
+    console.error("❌ Error logging in user:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
