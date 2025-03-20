@@ -31,7 +31,7 @@ mongoose
   });
 
 // ✅ Import the User model
-require("./UserDetails");
+require("./Schema/UserDetails");
 const User = mongoose.model("UserInfo");
 
 // ✅ Root endpoint to check if API is running
