@@ -70,6 +70,45 @@ app.post("/register", async (req, res) => {
 });
 
 
+const jwt = require("jsonwebtoken");
+
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // ✅ Validate request data
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email and password are required!" });
+    }
+
+    // ✅ Check if user exists
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    // ✅ Compare hashed password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    // ✅ Generate JWT token
+    const token = jwt.sign({ userId: user._id, email: user.email }, process.env.JWT_SECRET, {
+      expiresIn: "1h", // Token expires in 1 hour
+    });
+
+    // ✅ Send response with token
+    res.status(200).json({ message: "Login successful", token, user: { email: user.email } });
+
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+
 const nodemailer = require("nodemailer");
 
 //function to generate OTP
@@ -133,26 +172,6 @@ app.post("/forgetpassword", async (req,res) => {
   }
 });
 
-app.post("/login", async(req,res) =>{
-  try{
-    const { email, password } = req.body;
-    
-    // ✅ Validate request data
-    if (!email || !password) {
-      return res.status(400).json({ error: "Email and password are required!" });
-    }
-
-    const token = "fake-jwt-token";
-
-    res.status(200).json({ message: "Login successful", token });
-
-  } catch (error) {
-    console.error("Login error:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
-    
 
 //reset password backend 
 app.post("/resetpassword", async (req , res) => {
