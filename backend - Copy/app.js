@@ -69,6 +69,108 @@ app.post("/register", async (req, res) => {
   }
 });
 
+
+const nodemailer = require("nodemailer");
+
+//function to generate OTP
+const generatedOTP = () => {
+  return Math.floor(100000 + Math.random() * 900000);
+}
+
+//forgot password backend
+app.post("/forgetpassword", async (req) => {
+  const { email } = req.body;
+
+  // Validate required fields
+  if (!email.trim()) {
+    return res.status(400).json({ error: "Email is required!" });
+  }
+
+  try {
+    // Check if the user exists by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    //generate otp
+    const otp = generatedOTP();
+
+    //store otp in database 
+    const resetToken = otp;
+    user.resetToken = resetToken;
+    user.expireToken = Date.now() + 5 * 60 * 1000; // 5 minutes expiration
+    await user.save();
+
+    // standardise email transporter
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth:
+      {
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD
+      }
+    });
+
+    // create message for sending
+    const message = {
+      from: "SpotEase <SpotEase@gmail.com>",
+      to: req.body.email,
+      subject: "SpotEase reset password",
+      text: `Your OTP is: ${otp}. It will expire in 5 minute`
+    };
+
+    // Send the email
+    await transporter.sendMail(message);
+    console.log("Email sent successfully to", email);
+
+    // Respond with success message
+    res.json({ message: "OTP sent to your email" });
+
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    res.status(500).json({ error: "Internal Server Error" }); // Ensure JSON response here
+  }
+});
+
+//reset password backend 
+app.post("/resetpassword", async (req , res) => {
+  const { OTP , password } = req.body;
+
+  try {
+  // Validate required fields
+  if (!OTP || !password.trim()) {
+    return res.status(400).json({ error: "OTP and password are required!" });
+  }
+
+  //find user by OTP and check expiration
+  const user = await User.findOne({ resetToken: OTP , expireToken: { $gt: Date.now() } });
+
+  if (!user) {
+    return res.status(400).json({ error: "OTP expired. Try again." });
+  }
+
+  // ✅ Hash password before saving
+  const hashedPassword = await bcrypt.hash(password, 10);
+  await User.create({
+    email,
+    password: hashedPassword,
+  });
+
+  // update user pasword and clear OTP fields
+  user.password = hashedPassword;
+  user.resetToken = undefined;
+  user.expireToken = undefined;
+  await user.save();
+
+  // Respond with success message
+  res.json({ message: "Password reset successfully" });
+  } catch (error){
+  console.error("Error resetting password:", error);
+  res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 // ✅ Use dynamic PORT for Render
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
