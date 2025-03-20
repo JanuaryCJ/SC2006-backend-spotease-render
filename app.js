@@ -70,6 +70,45 @@ app.post("/register", async (req, res) => {
 });
 
 
+const jwt = require("jsonwebtoken");
+
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // ✅ Validate request data
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email and password are required!" });
+    }
+
+    // ✅ Check if user exists
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    // ✅ Compare hashed password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    // ✅ Generate JWT token
+    const token = jwt.sign({ userId: user._id, email: user.email }, process.env.JWT_SECRET, {
+      expiresIn: "1h", // Token expires in 1 hour
+    });
+
+    // ✅ Send response with token
+    res.status(200).json({ message: "Login successful", token, user: { email: user.email } });
+
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+
 const nodemailer = require("nodemailer");
 
 //function to generate OTP
@@ -78,7 +117,7 @@ const generatedOTP = () => {
 }
 
 //forgot password backend
-app.post("/forgetpassword", async (req) => {
+app.post("/forgetpassword", async (req,res) => {
   const { email } = req.body;
 
   // Validate required fields
@@ -114,7 +153,7 @@ app.post("/forgetpassword", async (req) => {
 
     // create message for sending
     const message = {
-      from: "SpotEase <SpotEase@gmail.com>",
+      from: "SpotEase <spotease123@gmail.com>",
       to: req.body.email,
       subject: "SpotEase reset password",
       text: `Your OTP is: ${otp}. It will expire in 5 minute`
@@ -133,10 +172,11 @@ app.post("/forgetpassword", async (req) => {
   }
 });
 
+
 //reset password backend 
 app.post("/resetpassword", async (req , res) => {
   const { OTP , password } = req.body;
-
+  console.log('Hello');
   try {
   // Validate required fields
   if (!OTP || !password.trim()) {
@@ -152,10 +192,10 @@ app.post("/resetpassword", async (req , res) => {
 
   // ✅ Hash password before saving
   const hashedPassword = await bcrypt.hash(password, 10);
-  await User.create({
-    email,
-    password: hashedPassword,
-  });
+  // await User.create({
+  //   email,
+  //   password: hashedPassword,
+  // });
 
   // update user pasword and clear OTP fields
   user.password = hashedPassword;
