@@ -78,7 +78,7 @@ const generatedOTP = () => {
 }
 
 //forgot password backend
-app.post("/forgetpassword", async (req) => {
+app.post("/forgetpassword", async (req,res) => {
   const { email } = req.body;
 
   // Validate required fields
