@@ -8,7 +8,15 @@ const UserDatailsSchema = new mongoose.Schema({
     },
     password:{
         type:String,
-        required:true
+        required:true,
+    },
+    resetToken: {
+        type: String,
+        required: false
+    },
+    expireToken: {
+        type: Date,
+        required: false
     }
 },{
     collection:"UserInfo"
