@@ -133,6 +133,27 @@ app.post("/forgetpassword", async (req,res) => {
   }
 });
 
+app.post("/login", async(req,res) =>{
+  try{
+    const { email, password } = req.body;
+    
+    // ✅ Validate request data
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email and password are required!" });
+    }
+
+    const token = "fake-jwt-token";
+
+    res.status(200).json({ message: "Login successful", token });
+
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+    
+
 // //reset password backend 
 // app.post("/resetpassword", async (req , res) => {
 //   const { OTP , password } = req.body;
