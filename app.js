@@ -133,43 +133,43 @@ app.post("/forgetpassword", async (req,res) => {
   }
 });
 
-//reset password backend 
-app.post("/resetpassword", async (req , res) => {
-  const { OTP , password } = req.body;
-  console.log('Hello');
-  try {
-  // Validate required fields
-  if (!OTP || !password.trim()) {
-    return res.status(400).json({ error: "OTP and password are required!" });
-  }
+// //reset password backend 
+// app.post("/resetpassword", async (req , res) => {
+//   const { OTP , password } = req.body;
+//   console.log('Hello');
+//   try {
+//   // Validate required fields
+//   if (!OTP || !password.trim()) {
+//     return res.status(400).json({ error: "OTP and password are required!" });
+//   }
 
-  //find user by OTP and check expiration
-  const user = await User.findOne({ resetToken: OTP , expireToken: { $gt: Date.now() } });
+//   //find user by OTP and check expiration
+//   const user = await User.findOne({ resetToken: OTP , expireToken: { $gt: Date.now() } });
 
-  if (!user) {
-    return res.status(400).json({ error: "OTP expired. Try again." });
-  }
+//   if (!user) {
+//     return res.status(400).json({ error: "OTP expired. Try again." });
+//   }
 
-  // ✅ Hash password before saving
-  const hashedPassword = await bcrypt.hash(password, 10);
-  // await User.create({
-  //   email,
-  //   password: hashedPassword,
-  // });
+//   // ✅ Hash password before saving
+//   const hashedPassword = await bcrypt.hash(password, 10);
+//   // await User.create({
+//   //   email,
+//   //   password: hashedPassword,
+//   // });
 
-  // update user pasword and clear OTP fields
-  user.password = hashedPassword;
-  user.resetToken = undefined;
-  user.expireToken = undefined;
-  await user.save();
+//   // update user pasword and clear OTP fields
+//   user.password = hashedPassword;
+//   user.resetToken = undefined;
+//   user.expireToken = undefined;
+//   await user.save();
 
-  // Respond with success message
-  res.json({ message: "Password reset successfully" });
-  } catch (error){
-  console.error("Error resetting password:", error);
-  res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+//   // Respond with success message
+//   res.json({ message: "Password reset successfully" });
+//   } catch (error){
+//   console.error("Error resetting password:", error);
+//   res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
 // ✅ Use dynamic PORT for Render
 const PORT = process.env.PORT || 5001;
