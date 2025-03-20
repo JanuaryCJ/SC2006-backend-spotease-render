@@ -136,7 +136,7 @@ app.post("/forgetpassword", async (req) => {
 //reset password backend 
 app.post("/resetpassword", async (req , res) => {
   const { OTP , password } = req.body;
-  console.log{'Hello'};
+  console.log('Hello');
   try {
   // Validate required fields
   if (!OTP || !password.trim()) {
