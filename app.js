@@ -114,7 +114,7 @@ app.post("/forgetpassword", async (req,res) => {
 
     // create message for sending
     const message = {
-      from: "SpotEase <SpotEase@gmail.com>",
+      from: "SpotEase <spotease123@gmail.com>",
       to: req.body.email,
       subject: "SpotEase reset password",
       text: `Your OTP is: ${otp}. It will expire in 5 minute`
@@ -152,10 +152,10 @@ app.post("/resetpassword", async (req , res) => {
 
   // ✅ Hash password before saving
   const hashedPassword = await bcrypt.hash(password, 10);
-  await User.create({
-    email,
-    password: hashedPassword,
-  });
+  // await User.create({
+  //   email,
+  //   password: hashedPassword,
+  // });
 
   // update user pasword and clear OTP fields
   user.password = hashedPassword;
