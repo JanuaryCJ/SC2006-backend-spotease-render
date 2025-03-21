@@ -51,7 +51,7 @@ router.post("/login",async(req,res)=>{
         if(!isPasswordMatch){
             return res.status(401).json({error:"Failed to login"});
         }
-        const token = jwt.sign({ userId: existuser._id, email: existuser.email }, process.env.JWT_SECRET, {
+        const token = jwt.sign({ userId: existUser._id, email: existUser.email }, process.env.JWT_SECRET, {
             expiresIn: "1h",
         });
 
