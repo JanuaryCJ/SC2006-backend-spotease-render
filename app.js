@@ -234,8 +234,8 @@ app.use(cors({
 
 connectDB();
 
-app.use("/auth", require("./auth/authRoutes"));
-app.use("/password", require("./auth/passwordRoutes"));
+app.use("/auth", require("./Routes/authRoutes"));
+app.use("/password", require("./Routes/passwordRoutes"));
 
 
 app.get("/", (req, res) => {
