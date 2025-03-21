@@ -45,7 +45,7 @@ router.post("/login",async(req,res)=>{
             return res.status(401).json({error:"Failed to login"});
         }
 
-        const isPasswordMatch = await bcrypt.compare(password,existuser.password);
+        const isPasswordMatch = await bcrypt.compare(password,existUser.password);
         if(!isPasswordMatch){
             return res.status(401).json({error:"Failed to login"});
         }
