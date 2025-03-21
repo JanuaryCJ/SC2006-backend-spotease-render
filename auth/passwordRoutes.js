@@ -17,7 +17,7 @@ const generateOTP = () => Math.floor(100000 + Math.random() * 900000);
 router.post("/forgetpassword", async (req, res) => {
     const { email } = req.body;
     try{
-        const existUser = await User.findone({email});
+        const existUser = await User.findOne({email});
         if (!existUser){
             return res.status(404).json({"error":"User does not exist"});
         }
@@ -54,7 +54,7 @@ router.post("/forgetpassword", async (req, res) => {
 router.post("/resetpassword", async (req,res) => {
     const {OTP,password} = req.body;
     try{
-        const existUser = await User.findone({resetToken:OTP,expireToken:{$gt:Date.now()}});
+        const existUser = await User.findOne({resetToken:OTP,expireToken:{$gt:Date.now()}});
         if(!existUser) return res.status(401).json({error:"OTP expired. Try again"});
 
         existUser.password = await bcrypt.hash(password,10);

@@ -15,7 +15,7 @@ router.post("/register", async (req, res) => {
         const {email,password} = req.body;
 
         // Check if user already exists
-        const existUser = await User.findone({email});
+        const existUser = await User.findOne({email});
         if (existUser){
             return res.status(409).json({error:"User already exists"});
         }
@@ -40,7 +40,7 @@ router.post("/login",async(req,res)=>{
             return res.status(400).json({error:"Email and password are required!"});
         }
 
-        const existUser = await User.findone({email});
+        const existUser = await User.findOne({email});
         if(!existUser){
             return res.status(401).json({error:"Failed to login"});
         }
