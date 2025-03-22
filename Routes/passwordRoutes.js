@@ -55,7 +55,7 @@ router.post("/resetpassword", async (req,res) => {
     const {OTP,password} = req.body;
     try{
         const existUser = await User.findOne({resetToken:OTP,expireToken:{$gt:Date.now()}});
-        if(!existUser) return res.status(401).json({error:"OTP expired. Try again"});
+        if(!existUser) return res.status(401).json({error:"OTP invalid. Try again"});
 
         existUser.password = await bcrypt.hash(password,10);
         existUser.resetToken = undefined;
