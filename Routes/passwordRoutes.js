@@ -38,7 +38,7 @@ router.post("/forgetpassword", async (req, res) => {
             from: "SpotEase <spotease123@gmailcom>",
             to: email,
             subject: "SpotEase reset password",
-            text:'Your OTP is: ${otp}. It will expire in 5 minutes',
+            text:`Your OTP is: ${otp}. It will expire in 5 minutes`,
         });
 
         res.status(200).json({message:"OTP sent successfully"});
