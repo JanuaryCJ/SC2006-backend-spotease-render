@@ -23,7 +23,7 @@ router.post("/forgetpassword", async (req, res) => {
         }
         const otp = generateOTP();
         existUser.resetToken = otp;
-        existUser.expireToken = Date.now() + 5 * 60 * 1000;
+        existUser.expireToken = Date.now() + 1 * 60 * 1000;
         await existUser.save();
 
         const transporter = nodemailer.createTransport({
@@ -38,7 +38,7 @@ router.post("/forgetpassword", async (req, res) => {
             from: "SpotEase <spotease123@gmailcom>",
             to: email,
             subject: "SpotEase reset password",
-            text:`Your OTP is: ${otp}. It will expire in 5 minutes`,
+            text:`Your OTP is: ${otp}. It will expire in 1 minutes`,
         });
 
         res.status(200).json({message:"OTP sent successfully"});
