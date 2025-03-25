@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const LocationSchema = new mongoose.Schema({
-  userId: {
+  email: {
     type: String,
     required: true,
     index: true
@@ -38,6 +38,6 @@ const LocationSchema = new mongoose.Schema({
 });
 
 // Create indexes for efficient querying
-LocationSchema.index({ userId: 1, timestamp: -1 });
+LocationSchema.index({ email: 1, timestamp: -1 });
 
 mongoose.model("LocationHistory", LocationSchema);
