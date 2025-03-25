@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 // ✅ Import User model
-const carParkData = mongoose.model("HDBCarPark",carParkDetailsSchema);
+const carParkData = mongoose.model("HDBCarPark");
 const router = express.Router();
 
 router.post("/carParkRetrieval", async (req, res) => {
