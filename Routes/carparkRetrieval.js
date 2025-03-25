@@ -15,8 +15,12 @@ router.post("/carParkRetrieval", async (req, res) => {
     console.log("X: " + x_coord + " Y: " + y_coord + " Radius:" + filterRadius);
 
     //Retrieve Car Parks Within X & Y Boundary
+    minX = x_coord + filterRadius;
+    maxX = x_coord - filterRadius;
+    minY = y_coord + filterRadius;
+    maxY = y_coord + filterRadius;
     const carParks = await carParkData.find({
-      x_coord: {$lte: x_coord + filterRadius, $gte: x_coord + filterRadius}
+      x_coord: {$lte: minX, $gte: maxX}
     });
     /*
     const carParks = await carParkData.find({
