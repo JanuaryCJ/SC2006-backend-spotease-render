@@ -5,8 +5,6 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 // ✅ Import User model
-require("../Schema/UserDetails");
-const User = mongoose.model("UserInfo");
 const carParkData = mongoose.model("HDBCarPark");
 const router = express.Router();
 
