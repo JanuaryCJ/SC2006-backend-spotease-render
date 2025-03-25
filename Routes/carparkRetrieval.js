@@ -11,8 +11,9 @@ const router = express.Router();
 
 router.post("/carParkRetrieval", async (req, res) => {
   try {
-    const { x_coord, y_coord } = req.body;
-
+    const { x_coord, y_coord, filterRadius } = req.body;
+    console.log("X: " + x_coord + " Y: " + y_coord + " Radius:" + filterRadius);
+    
     //Retrieve Car Parks Within X & Y Boundary
     const carParks = await carParkData.find({
       car_park_no: "AM96",
