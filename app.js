@@ -225,6 +225,8 @@ require("dotenv").config();
 
 const app = express();
 app.use(express.json());
+app.use("/location", require("./Routes/locationRoutes"));
+
 
 app.use(cors({
     origin: "*",
