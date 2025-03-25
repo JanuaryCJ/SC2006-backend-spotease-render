@@ -19,14 +19,10 @@ router.post("/carParkRetrieval", async (req, res) => {
     maxX = x_coord + filterRadius;
     minY = y_coord - filterRadius;
     maxY = y_coord + filterRadius;
-    console.log(typeof(maxX));
-    console.log("x_coord:", x_coord);
-    console.log("minX:", minX, "maxX:", maxX);
-    // console.log("y_coord:", y_coord);
-    // console.log("minY:", minY, "maxY:", maxY);
-    //29980,29940
+
     const carParks = await carParkData.find({
       x_coord: {$lte:maxX , $gte: minX},
+      y_coord: {$lte:maxY , $gte: minY}
     });
     /*
     const carParks = await carParkData.find({
