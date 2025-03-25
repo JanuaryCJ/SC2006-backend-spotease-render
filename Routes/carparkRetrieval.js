@@ -17,6 +17,7 @@ router.post("/carParkRetrieval", async (req, res) => {
     const carParks = await carParkData.find({
       car_park_no: "AM96",
     });
+    console.log(carParks);
 
     res.json(carParks);
   } catch (error) {
