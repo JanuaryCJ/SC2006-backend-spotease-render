@@ -1,0 +1,29 @@
+const express = require("express");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
+require("dotenv").config();
+
+// ✅ Import User model
+require("../Schema/UserDetails");
+const User = mongoose.model("UserInfo");
+const carParkData = mongoose.model("HDBCarPark");
+const router = express.Router();
+
+router.post("/carParkRetrieval", async (req, res) => {
+  try {
+    const { xValues, yValues, filterRadius } = req.body;
+
+    //Retrieve Car Parks Within X & Y Boundary
+    const carParks = await carParkData.find({
+      car_park_no: "AM96",
+    });
+
+    res.json(carParks);
+  } catch (error) {
+    console.error("❌ Error registering user:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+module.exports = router;

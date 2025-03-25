@@ -237,6 +237,9 @@ connectDB();
 app.use("/auth", require("./Routes/authRoutes"));
 app.use("/password", require("./Routes/passwordRoutes"));
 
+//TESTING//
+app.use("/carpark", require("./Routes/carparkRetrieval"))
+
 
 app.get("/", (req, res) => {
   res.json({ status: "Server is running!" });
