@@ -13,14 +13,12 @@ const LocationSchema = new mongoose.Schema({
   coordinates: {
     latitude: {
       type: Number,
-      required: true
     },
     longitude: {
       type: Number,
-      required: true
     }
   },
-  locationName: {
+  locationAddress: {
     type: String,
     default: ''
   },
@@ -28,10 +26,7 @@ const LocationSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
-  device: {
-    type: String,
-    default: 'Mobile'
-  }
+
 }, { 
   collection: "LocationHistory",
   timestamps: true

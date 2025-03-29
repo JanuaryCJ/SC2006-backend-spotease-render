@@ -6,7 +6,9 @@ require("dotenv").config();
 
 // ✅ Import User model
 require("../Schema/UserDetails");
+require("../Schema/LocationDetails")
 const User = mongoose.model("UserInfo");
+const ProfileLocationHistory = mongoose.model("LocationHistory");
 
 const router = express.Router();
 
@@ -27,6 +29,10 @@ router.post("/register", async (req, res) => {
             email,
             password:hashedPassword,
         });
+
+        await ProfileLocationHistory.create({
+            email,
+        })
 
         res.status(201).json({status:"User registered"});
     }catch(error){
