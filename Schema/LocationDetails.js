@@ -13,18 +13,27 @@ const LocationSchema = new mongoose.Schema({
   coordinates: {
     latitude: {
       type: Number,
+      required: true,
     },
     longitude: {
       type: Number,
+      required: true,
+    },
+    x_coor: {
+      type: Number,
+      required: true,
+    },
+    y_coor: {
+      type: Number,
+      required: true,
     }
   },
   locationAddress: {
     type: String,
-    default: ''
+    required: true,
   },
   locationType: {
     type: String,
-    default: ''
   },
 
 }, { 
