@@ -241,6 +241,7 @@ app.use("/password", require("./Routes/passwordRoutes"));
 
 //TESTING//
 app.use("/carpark", require("./Routes/carparkRetrieval"))
+app.use("/profile",require("./Routes/profileRetrieval"))
 
 
 app.get("/", (req, res) => {
