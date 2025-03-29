@@ -10,8 +10,10 @@ const User = mongoose.model("UserInfo");
 const ProfileLocationHistory = mongoose.model("LocationHistory");
 
 // ✅ Secure POST to save location (with token + user check)
-router.post("/locationHistory", async (req, res) => {
+router.post("/locationHistory", authenticateToken,async (req, res) => {
   try {
+    // Extract user info from decoded JWT
+    const { userId, email } = req.user;
 
     // 1. ✅ Verify user exists in DB
     const user = await User.findById(userId);
