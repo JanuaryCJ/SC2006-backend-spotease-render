@@ -1,27 +1,30 @@
-const express = required("express")
-const authenticateToken = require("../JWT_Auth/authenticateToken")
-const User = require("../Schema/UserDetails")
+const express = require("express");
+const router = express.Router(); // you were missing this!
+const authenticateToken = require("../JWT_Auth/authenticateToken");
+const User = require("../Schema/UserDetails");
 require("dotenv").config();
 
+// Protected route to retrieve user profile
+router.get("/profile", authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.userId; // from decoded token set in middleware
 
-require("Schema/profileRetrieval", async(req,res) =>{
-    try{
-        const userID = req.user.userID;
+        const existUser = await User.findById(userId);
 
-        const existUser = await User.findById(userID);
-
-        if (!existUser) return response.status(400).json({error: "User not found."});
+        if (!existUser) {
+            return res.status(404).json({ error: "User not found." });
+        }
 
         const userProfile = {
             email: existUser.email,
             id: existUser._id
         };
 
-        return response.status(200).json({user:userProfile});
-    }catch(error)
-    {
-        console.error("Error retrieving profile")
-        return response.status(500).json({error: "server error"})
+        return res.status(200).json({ user: userProfile });
+
+    } catch (error) {
+        console.error("❌ Error retrieving profile:", error);
+        return res.status(500).json({ error: "Server error" });
     }
 });
 
