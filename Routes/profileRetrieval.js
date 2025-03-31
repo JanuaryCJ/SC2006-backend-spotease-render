@@ -52,4 +52,23 @@ router.post("/createLocationHistory", authenticateToken,async (req, res) => {
   }
 });
 
+
+router.post("/fetchLocationHistory", authenticateToken,async (req, res) => {
+  try{
+    const { userId, email } = req.user;
+
+    const user = await User.findById(userId);
+    if (!user || user.email !== email) {
+      return res.status(401).json({ error: "Unauthorized: Invalid user" });
+    }
+
+    const locationHistory = await ProfileLocationHistory.find({email}).sort({timestamp:-1});
+
+
+
+  }catch (error){
+    console.error("Error fetch lcoation history:", error);
+  }
+});
+
 module.exports = router;
