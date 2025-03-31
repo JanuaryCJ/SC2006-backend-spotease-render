@@ -63,6 +63,7 @@ router.post("/fetchLocationHistory", authenticateToken,async (req, res) => {
     }
 
     const locationHistory = await ProfileLocationHistory.find({email}).sort({timestamp:-1});
+    res.status(200).json({ history: locationHistory }); 
 
 
 
