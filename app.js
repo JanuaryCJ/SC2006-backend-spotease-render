@@ -229,9 +229,9 @@ app.use("/location", require("./Routes/locationRoutes"));
 
 
 app.use(cors({
-    origin: "*",
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type"],
+  origin: '*',
+  methods: ['GET', 'POST', 'DELETE', 'PUT'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 connectDB();
