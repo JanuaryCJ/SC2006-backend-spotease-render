@@ -72,4 +72,33 @@ router.post("/fetchLocationHistory", authenticateToken,async (req, res) => {
   }
 });
 
+// Add this route to your profileRetrieval.js file
+
+// Clear location history for authenticated user
+// profileRetrieval.js (or your routes file)
+// Add to your profileRetrieval.js or similar route file
+const LocationHistory = mongoose.model("LocationHistory"); // Ensure this is imported
+
+router.delete('/clear-location-history', authenticateToken, async (req, res) => {
+  try {
+    const { email } = req.user; // From JWT token
+
+    // Delete all location records for this user
+    const result = await LocationHistory.deleteMany({ email });
+
+    res.status(200).json({
+      success: true,
+      message: "Location history cleared",
+      deletedCount: result.deletedCount
+    });
+
+  } catch (error) {
+    console.error("Error clearing history:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to clear location history"
+    });
+  }
+});
+
 module.exports = router;
